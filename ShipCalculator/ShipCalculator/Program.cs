@@ -37,7 +37,9 @@ namespace ShipCalculator
             catch (Exception ex)
             {
 
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine("Something went wrong : " + Environment.NewLine  + " -      Internet might not be available." + Environment.NewLine + " -      The WEB API (" + StringHelper.urlbase+") might be down.");
+
+                Console.Read();
             }
 
         }
