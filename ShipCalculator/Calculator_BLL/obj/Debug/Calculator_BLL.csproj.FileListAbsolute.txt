@@ -24,3 +24,17 @@ C:\Users\fede_\Desktop\ShipCalculator\Calculator_BLL\obj\Debug\Calculator_BLL.dl
 C:\Users\fede_\Desktop\ShipCalculator\Calculator_BLL\obj\Debug\Calculator_BLL.pdb
 C:\Users\fede_\Desktop\ShipCalculator\Calculator_BLL\obj\Debug\Calculator_BLL.csprojResolveAssemblyReference.cache
 C:\Users\mensegfe\Desktop\ShipCalculator\Calculator_BLL\obj\Debug\Calculator_BLL.csprojAssemblyReference.cache
+C:\Users\fede_\source\repos\shipCalculator_SW\ShipCalculator\Calculator_BLL\bin\Debug\Calculator_BLL.dll.config
+C:\Users\fede_\source\repos\shipCalculator_SW\ShipCalculator\Calculator_BLL\bin\Debug\Calculator_BLL.dll
+C:\Users\fede_\source\repos\shipCalculator_SW\ShipCalculator\Calculator_BLL\bin\Debug\Calculator_BLL.pdb
+C:\Users\fede_\source\repos\shipCalculator_SW\ShipCalculator\Calculator_BLL\bin\Debug\System.Net.Http.dll
+C:\Users\fede_\source\repos\shipCalculator_SW\ShipCalculator\Calculator_BLL\bin\Debug\System.Net.Http.Extensions.dll
+C:\Users\fede_\source\repos\shipCalculator_SW\ShipCalculator\Calculator_BLL\bin\Debug\System.Net.Http.Formatting.dll
+C:\Users\fede_\source\repos\shipCalculator_SW\ShipCalculator\Calculator_BLL\bin\Debug\System.Net.Http.Primitives.dll
+C:\Users\fede_\source\repos\shipCalculator_SW\ShipCalculator\Calculator_BLL\bin\Debug\System.Net.Http.WebRequest.dll
+C:\Users\fede_\source\repos\shipCalculator_SW\ShipCalculator\Calculator_BLL\bin\Debug\Newtonsoft.Json.dll
+C:\Users\fede_\source\repos\shipCalculator_SW\ShipCalculator\Calculator_BLL\bin\Debug\System.Net.Http.xml
+C:\Users\fede_\source\repos\shipCalculator_SW\ShipCalculator\Calculator_BLL\bin\Debug\System.Net.Http.WebRequest.xml
+C:\Users\fede_\source\repos\shipCalculator_SW\ShipCalculator\Calculator_BLL\obj\Debug\Calculator_BLL.csprojResolveAssemblyReference.cache
+C:\Users\fede_\source\repos\shipCalculator_SW\ShipCalculator\Calculator_BLL\obj\Debug\Calculator_BLL.dll
+C:\Users\fede_\source\repos\shipCalculator_SW\ShipCalculator\Calculator_BLL\obj\Debug\Calculator_BLL.pdb
