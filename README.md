@@ -4,6 +4,8 @@ This program consume an WebAPI (https://swapi.co/) that provides you a list of s
 ## What it does?
 You need to input an integer value that will be the mega lights you want to travel. If the value is not an integer, the program will return an error and ask you to input a new value.
 
+## How do I run it ?
+You will find the executable in folder "shipCalculator_SW\ShipCalculator\ShipCalculator\bin\Debug" and the file name is ShipCalculator.exe
 
 ## Required 
  - As it was developed with .NET Framework 4.5. You will need to get it installed. You can download it from this link:                         https://www.microsoft.com/es-ar/download/details.aspx?id=30653
@@ -13,8 +15,9 @@ You need to input an integer value that will be the mega lights you want to trav
   After you input a value and press Enter. Application will show you this message : "Getting info from server...". While we get data from server.
   After getting data, it will show you a list of starships and how many stops do they need to travel the input value.
   If the starship does not include information of consumable or MegaLights the result will be unknown.
-  Other wise you will see something like:
-  ```javascript
+  
+ Otherwise you will see, for example:
+```javascript
      Executor: 476
      Sentinel-class landing craft: 19841
      Death Star: 3805
