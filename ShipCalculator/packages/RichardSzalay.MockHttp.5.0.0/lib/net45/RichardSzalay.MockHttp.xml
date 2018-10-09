@@ -1,0 +1,808 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RichardSzalay.MockHttp</name>
+    </assembly>
+    <members>
+        <member name="T:RichardSzalay.MockHttp.BackendDefinitionBehavior">
+            <summary>
+            Defines the behavior for processing BackendDefinitions when Request Expectations exist
+            </summary>
+        </member>
+        <member name="F:RichardSzalay.MockHttp.BackendDefinitionBehavior.NoExpectations">
+            <summary>
+            Will not match Backend Definitions if Request Expectations exist
+            </summary>
+        </member>
+        <member name="F:RichardSzalay.MockHttp.BackendDefinitionBehavior.Always">
+            <summary>
+            Will match Backend Definitions if the next Request Expectation did not match
+            </summary>
+        </member>
+        <member name="T:RichardSzalay.MockHttp.IMockedRequest">
+            <summary>
+            A preconfigured response to a HTTP request
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.IMockedRequest.Matches(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Determines if a request can be handled by this instance
+            </summary>
+            <param name="request">The <see cref="T:HttpRequestMessage"/> being sent</param>
+            <returns>true if this instance can handle the request; false otherwise</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.IMockedRequest.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            Submits the request to be handled by this instance
+            </summary>
+            <param name="message">The request message being sent</param>
+            <param name="cancellationToken">A <see cref="T:CancellationToken"/> for long running requests</param>
+            <returns>The <see cref="T:HttpResponseMessage"/> to the request</returns>
+        </member>
+        <member name="T:RichardSzalay.MockHttp.IMockedRequestMatcher">
+            <summary>
+            Represents a constraint on a mocked request
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.IMockedRequestMatcher.Matches(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Determines whether the implementation matches a given request
+            </summary>
+            <param name="message">The request message being evaluated</param>
+            <returns>true if the request was matched; false otherwise</returns>
+        </member>
+        <member name="T:RichardSzalay.MockHttp.Matchers.AnyMatcher">
+            <summary>
+            A composite matcher that suceeds if any of it's composed matchers succeed
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.AnyMatcher.#ctor(System.Collections.Generic.IEnumerable{RichardSzalay.MockHttp.IMockedRequestMatcher})">
+            <summary>
+            Construcuts a new instnace of AnyMatcher
+            </summary>
+            <param name="matchers">The list of matchers to evaluate</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.AnyMatcher.Matches(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Determines whether the implementation matches a given request
+            </summary>
+            <param name="message">The request message being evaluated</param>
+            <returns>true if any of the supplied matchers succeed; false otherwise</returns>
+        </member>
+        <member name="T:RichardSzalay.MockHttp.Matchers.ContentMatcher">
+            <summary>
+            Matches requests on request content
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.ContentMatcher.#ctor(System.String)">
+            <summary>
+            Constructs a new instance of ContentMatcher
+            </summary>
+            <param name="content">The content to match</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.ContentMatcher.Matches(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Determines whether the implementation matches a given request
+            </summary>
+            <param name="message">The request message being evaluated</param>
+            <returns>true if the request was matched; false otherwise</returns>
+        </member>
+        <member name="T:RichardSzalay.MockHttp.Matchers.CustomMatcher">
+            <summary>
+            Matches requests using a custom delegate
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.CustomMatcher.#ctor(System.Func{System.Net.Http.HttpRequestMessage,System.Boolean})">
+            <summary>
+            Constructs a new instance of CustomMatcher
+            </summary>
+            <param name="matcher">The matcher delegate</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.CustomMatcher.Matches(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Determines whether the implementation matches a given request
+            </summary>
+            <param name="message">The request message being evaluated</param>
+            <returns>true if the request was matched; false otherwise</returns>
+        </member>
+        <member name="T:RichardSzalay.MockHttp.Matchers.FormDataMatcher">
+            <summary>
+            Matches requests on form data values
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.FormDataMatcher.#ctor(System.String,System.Boolean)">
+            <summary>
+            Constructs a new instance of FormDataMatcher using a formatted query string
+            </summary>
+            <param name="formData">Formatted form data (key=value&amp;key2=value2)</param>
+            <param name="exact">When true, requests with form data values not included in <paramref name="formData"/> will not match. Defaults to false</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.FormDataMatcher.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Boolean)">
+            <summary>
+            Constructs a new instance of FormDataMatcher using a list of key value pairs to match
+            </summary>
+            <param name="values">A list of key value pairs to match</param>
+            <param name="exact">When true, requests with form data values not included in <paramref name="values"/> will not match. Defaults to false</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.FormDataMatcher.Matches(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Determines whether the implementation matches a given request
+            </summary>
+            <param name="message">The request message being evaluated</param>
+            <returns>true if the request was matched; false otherwise</returns>
+        </member>
+        <member name="T:RichardSzalay.MockHttp.Matchers.HeadersMatcher">
+            <summary>
+            Matches a request based on its request headers
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.HeadersMatcher.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+            <summary>
+            Constructs a new instance of HeadersMatcher using a list of key value pairs to match
+            </summary>
+            <param name="headers">A list of key value pairs to match</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.HeadersMatcher.#ctor(System.String)">
+            <summary>
+            Constructs a new instance of HeadersMatcher using a formatted list of headers (Header: Value)
+            </summary>
+            <param name="headers">A formatted list of headers, separated by Environment.NewLine</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.HeadersMatcher.Matches(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Determines whether the implementation matches a given request
+            </summary>
+            <param name="message">The request message being evaluated</param>
+            <returns>true if the request was matched; false otherwise</returns>
+        </member>
+        <member name="T:RichardSzalay.MockHttp.Matchers.MethodMatcher">
+            <summary>
+            Matches requests based on their HTTP method
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.MethodMatcher.#ctor(System.Net.Http.HttpMethod)">
+            <summary>
+            Constructs a new instance of MethodMatcher
+            </summary>
+            <param name="method">The method to match against</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.MethodMatcher.Matches(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Determines whether the implementation matches a given request
+            </summary>
+            <param name="message">The request message being evaluated</param>
+            <returns>true if the request was matched; false otherwise</returns>
+        </member>
+        <member name="T:RichardSzalay.MockHttp.Matchers.PartialContentMatcher">
+            <summary>
+            Matches requests on partial request content
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.PartialContentMatcher.#ctor(System.String)">
+            <summary>
+            Constructs a new instance of PartialContentMatcher
+            </summary>
+            <param name="content">The partial content to match</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.PartialContentMatcher.Matches(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Determines whether the implementation matches a given request
+            </summary>
+            <param name="message">The request message being evaluated</param>
+            <returns>true if the request was matched; false otherwise</returns>
+        </member>
+        <member name="T:RichardSzalay.MockHttp.Matchers.QueryStringMatcher">
+            <summary>
+            Matches requests on querystring values
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.QueryStringMatcher.#ctor(System.String,System.Boolean)">
+            <summary>
+            Constructs a new instance of QueryStringMatcher using a formatted query string
+            </summary>
+            <param name="queryString">A formatted query string (key=value&amp;key2=value2)</param>
+            <param name="exact">When true, requests with querystring values not included in <paramref name="queryString"/> will not match. Defaults to false</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.QueryStringMatcher.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Boolean)">
+            <summary>
+            Constructs a new instance of QueryStringMatcher using a list of key value pairs to match
+            </summary>
+            <param name="values">A list of key value pairs to match</param>
+            <param name="exact">When true, requests with querystring values not included in <paramref name="values"/> will not match. Defaults to false</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.QueryStringMatcher.Matches(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Determines whether the implementation matches a given request
+            </summary>
+            <param name="message">The request message being evaluated</param>
+            <returns>true if the request was matched; false otherwise</returns>
+        </member>
+        <member name="T:RichardSzalay.MockHttp.Matchers.UrlMatcher">
+            <summary>
+            Matches requests on their URL
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.UrlMatcher.#ctor(System.String)">
+            <summary>
+            Constructs a new instance of UrlMatcher
+            </summary>
+            <param name="url">The url (relative or absolute) to match</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.Matchers.UrlMatcher.Matches(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Determines whether the implementation matches a given request
+            </summary>
+            <param name="message">The request message being evaluated</param>
+            <returns>true if the request was matched; false otherwise</returns>
+        </member>
+        <member name="T:RichardSzalay.MockHttp.MockedRequest">
+            <summary>
+            A preconfigured response to a HTTP request
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequest.#ctor">
+            <summary>
+            Creates a new MockedRequest with no initial matchers
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequest.#ctor(System.String)">
+            <summary>
+            Creates a new MockedRequest with an initial URL (and optionally query string) matcher
+            </summary>
+            <param name="url">An absolute or relative URL that may contain a query string</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequest.Matches(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Determines if a request can be handled by this instance
+            </summary>
+            <param name="message">The <see cref="T:HttpRequestMessage"/> being sent</param>
+            <returns>true if this instance can handle the request; false otherwise</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequest.With(RichardSzalay.MockHttp.IMockedRequestMatcher)">
+            <summary>
+            Constraints the request using custom logic
+            </summary>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequest.Respond(System.Func{System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage}})">
+            <summary>
+            Sets the response of ther 
+            </summary>
+            <param name="handler"></param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequest.Respond(System.Func{System.Net.Http.HttpRequestMessage,System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage}})">
+            <summary>
+            Supplies a response to the submitted request
+            </summary>
+            <param name="handler">The callback that will be used to supply the response</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequest.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            Provides the configured response in relation to the request supplied
+            </summary>
+            <param name="message">The request being sent</param>
+            <param name="cancellationToken">The token used to cancel the request</param>
+            <returns>A Task containing the future response message</returns>
+        </member>
+        <member name="T:RichardSzalay.MockHttp.MockedRequestExtensions">
+            <summary>
+            Provides extension methods for <see cref="T:MockedRequest"/>
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.With(RichardSzalay.MockHttp.MockedRequest,System.Func{System.Net.Http.HttpRequestMessage,System.Boolean})">
+            <summary>
+            Constraints the request using custom logic
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="matcher">The delegate that will be used to constrain the request</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.WithQueryString(RichardSzalay.MockHttp.MockedRequest,System.String,System.String)">
+            <summary>
+            Includes requests contain a particular query string value
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="name">The query string key to match</param>
+            <param name="value">The query string value to match (including null)</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.WithQueryString(RichardSzalay.MockHttp.MockedRequest,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+            <summary>
+            Includes requests contain a set of query string values
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="values">The query string key/value pairs to match</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.WithQueryString(RichardSzalay.MockHttp.MockedRequest,System.String)">
+            <summary>
+            Includes requests contain a set of query string values
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="values">A formatted query string containing key/value pairs to match</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.WithExactQueryString(RichardSzalay.MockHttp.MockedRequest,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+            <summary>
+            Includes requests that contain all of the specified query string values and no others
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="values">The query string key/value pairs to match</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.WithExactQueryString(RichardSzalay.MockHttp.MockedRequest,System.String)">
+            <summary>
+            Includes requests that contain all of the specified query string values and no others
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="values">A formatted query string containing key/value pairs to match</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.WithFormData(RichardSzalay.MockHttp.MockedRequest,System.String,System.String)">
+            <summary>
+            Includes requests contain a particular form data value
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="name">The form data key to match</param>
+            <param name="value">The form data value to match (including null)</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.WithFormData(RichardSzalay.MockHttp.MockedRequest,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+            <summary>
+            Includes requests contain a set of query string values
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="values">The query string key/value pairs to match</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.WithFormData(RichardSzalay.MockHttp.MockedRequest,System.String)">
+            <summary>
+            Includes requests contain a set of query string values
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="values">A formatted query string containing key/value pairs to match</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.WithExactFormData(RichardSzalay.MockHttp.MockedRequest,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+            <summary>
+            Includes requests that contain all of the specified form data values and no others
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="values">The query string key/value pairs to match</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.WithExactFormData(RichardSzalay.MockHttp.MockedRequest,System.String)">
+            <summary>
+            Includes requests that contain all of the specified form data values and no others
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="values">A formatted query string containing key/value pairs to match</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.WithContent(RichardSzalay.MockHttp.MockedRequest,System.String)">
+            <summary>
+            Includes requests with particular content
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="content">The content to match against the request</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.WithPartialContent(RichardSzalay.MockHttp.MockedRequest,System.String)">
+            <summary>
+            Includes requests with content that contains a particular value
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="partialContent">The content to match against the request</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.WithHeaders(RichardSzalay.MockHttp.MockedRequest,System.String,System.String)">
+            <summary>
+            Includes requests contain a particular header
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="name">The HTTP header name</param>
+            <param name="value">The value of the HTTP header to match</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.WithHeaders(RichardSzalay.MockHttp.MockedRequest,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+            <summary>
+            Includes requests contain a set of headers
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="headers">A list of HTTP header name/value pairs</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.WithHeaders(RichardSzalay.MockHttp.MockedRequest,System.String)">
+            <summary>
+            Includes requests contain a set of headers
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="headers">A string containing headers as they would appear in the HTTP request</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.WithAny(RichardSzalay.MockHttp.MockedRequest,System.Collections.Generic.IEnumerable{RichardSzalay.MockHttp.IMockedRequestMatcher})">
+            <summary>
+            Requires that the request match any of the specified set of matchers
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="matchers">A list of matchers to evaluate</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.WithAny(RichardSzalay.MockHttp.MockedRequest,RichardSzalay.MockHttp.IMockedRequestMatcher[])">
+            <summary>
+            Requires that the request match any of the specified set of matchers
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="matchers">A list of matchers to evaluate</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Net.Http.HttpResponseMessage)">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="message">The complete <see cref="T:HttpResponseMessage"/> to return</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Net.HttpStatusCode)">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="statusCode">The <see cref="T:HttpStatusCode"/> of the response</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Net.HttpStatusCode,System.Net.Http.HttpContent)">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="statusCode">The <see cref="T:HttpStatusCode"/> of the response</param>
+            <param name="content">The content of the response</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Net.HttpStatusCode,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Net.Http.HttpContent)">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="statusCode">The <see cref="T:HttpStatusCode"/> of the response</param>
+            <param name="headers">A list of HTTP header name/value pairs to add to the response.</param>
+            <param name="content">The content of the response</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Net.Http.HttpContent)">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>, with an OK (200) status code
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="content">The content of the response</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Net.Http.HttpContent)">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>, with an OK (200) status code
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="headers">A list of HTTP header name/value pairs to add to the response.</param>
+            <param name="content">The content of the response</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Net.HttpStatusCode,System.String,System.String)">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="statusCode">The <see cref="T:HttpStatusCode"/> of the response</param>
+            <param name="mediaType">The media type of the response</param>
+            <param name="content">The content of the response</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Net.HttpStatusCode,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String)">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="statusCode">The <see cref="T:HttpStatusCode"/> of the response</param>
+            <param name="headers">A list of HTTP header name/value pairs to add to the response.</param>
+            <param name="mediaType">The media type of the response</param>
+            <param name="content">The content of the response</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.String,System.String)">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>, with an OK (200) status code
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="content">The content of the response</param>
+            <param name="mediaType">The media type of the response</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String)">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>, with an OK (200) status code
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="headers">A list of HTTP header name/value pairs to add to the response.</param>
+            <param name="content">The content of the response</param>
+            <param name="mediaType">The media type of the response</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Net.HttpStatusCode,System.String,System.IO.Stream)">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="statusCode">The <see cref="T:HttpStatusCode"/> of the response</param>
+            <param name="content">The content of the response</param>
+            <param name="mediaType">The media type of the response</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Net.HttpStatusCode,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.IO.Stream)">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="statusCode">The <see cref="T:HttpStatusCode"/> of the response</param>
+            <param name="headers">A list of HTTP header name/value pairs to add to the response.</param>
+            <param name="content">The content of the response</param>
+            <param name="mediaType">The media type of the response</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.String,System.Func{System.Net.Http.HttpRequestMessage,System.IO.Stream})">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="mediaType">The media type of the response</param>
+            <param name="handler">A delegate that will return a content stream at runtime</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.Func{System.Net.Http.HttpRequestMessage,System.IO.Stream})">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="headers">A list of HTTP header name/value pairs to add to the response.</param>
+            <param name="mediaType">The media type of the response</param>
+            <param name="handler">A delegate that will return a content stream at runtime</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Net.HttpStatusCode,System.String,System.Func{System.Net.Http.HttpRequestMessage,System.IO.Stream})">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="statusCode">The <see cref="T:HttpStatusCode"/> of the response</param>
+            <param name="mediaType">The media type of the response</param>
+            <param name="handler">A delegate that will return a content stream at runtime</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Net.HttpStatusCode,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.Func{System.Net.Http.HttpRequestMessage,System.IO.Stream})">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="statusCode">The <see cref="T:HttpStatusCode"/> of the response</param>
+            <param name="headers">A list of HTTP header name/value pairs to add to the response.</param>
+            <param name="mediaType">The media type of the response</param>
+            <param name="handler">A delegate that will return a content stream at runtime</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.String,System.IO.Stream)">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>, with an OK (200) status code
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="content">The content of the response</param>
+            <param name="mediaType">The media type of the response</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.IO.Stream)">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>, with an OK (200) status code
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="headers">A list of HTTP header name/value pairs to add to the response.</param>
+            <param name="content">The content of the response</param>
+            <param name="mediaType">The media type of the response</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Func{System.Net.Http.HttpRequestMessage,System.Net.Http.HttpContent})">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="handler">The delegate that will return a <see cref="T:HttpContent"/> determined at runtime</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Func{System.Net.Http.HttpRequestMessage,System.Net.Http.HttpContent})">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="headers">A list of HTTP header name/value pairs to add to the response.</param>
+            <param name="handler">The delegate that will return a <see cref="T:HttpContent"/> determined at runtime</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Net.HttpStatusCode,System.Func{System.Net.Http.HttpRequestMessage,System.Net.Http.HttpContent})">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="statusCode">The <see cref="T:HttpStatusCode"/> of the response</param>
+            <param name="handler">The delegate that will return a <see cref="T:HttpContent"/> determined at runtime</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Net.HttpStatusCode,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Func{System.Net.Http.HttpRequestMessage,System.Net.Http.HttpContent})">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="statusCode">The <see cref="T:HttpStatusCode"/> of the response</param>
+            <param name="headers">A list of HTTP header name/value pairs to add to the response.</param>
+            <param name="handler">The delegate that will return a <see cref="T:HttpContent"/> determined at runtime</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Func{System.Net.Http.HttpRequestMessage,System.Net.Http.HttpResponseMessage})">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="handler">The delegate that will return a <see cref="T:HttpResponseMessage"/> determined at runtime</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Net.Http.HttpClient)">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/> to defer to another <see cref="T:HttpClient"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="httpClient">The <see cref="T:HttpClient"/> that will handle requests</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Respond(RichardSzalay.MockHttp.MockedRequest,System.Net.Http.HttpMessageHandler)">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/> to defer to another <see cref="T:HttpMessageListener"/>
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="handler">The <see cref="T:HttpMessageHandlert"/> that will handle requests</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockedRequestExtensions.Throw(RichardSzalay.MockHttp.MockedRequest,System.Exception)">
+            <summary>
+            Sets the response of the current <see cref="T:MockedRequest"/> to a lambda which throws the specified exception.
+            </summary>
+            <param name="source">The source mocked request</param>
+            <param name="exception">The exception to throw</param>
+        </member>
+        <member name="T:RichardSzalay.MockHttp.MockHttpMessageHandler">
+            <summary>
+            Responds to requests using pre-configured responses
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockHttpMessageHandler.#ctor(RichardSzalay.MockHttp.BackendDefinitionBehavior)">
+            <summary>
+            Creates a new instance of MockHttpMessageHandler
+            </summary>
+        </member>
+        <member name="P:RichardSzalay.MockHttp.MockHttpMessageHandler.AutoFlush">
+            <summary>
+            Requests received while AutoFlush is true will complete instantly. 
+            Requests received while AutoFlush is false will not complete until <see cref="M:Flush"/> is called
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockHttpMessageHandler.Flush">
+            <summary>
+            Completes all pendings requests that were received while <see cref="M:AutoFlush"/> was false
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockHttpMessageHandler.Flush(System.Int32)">
+            <summary>
+            Completes <param name="count" /> pendings requests that were received while <see cref="M:AutoFlush"/> was false
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockHttpMessageHandler.ToHttpClient">
+            <summary>
+            Creates an HttpClient instance using this MockHttpMessageHandler
+            </summary>
+            <returns>An instance of HttpClient that can be used to send HTTP request against the configuration of this mock handler</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockHttpMessageHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            Maps the request to the most appropriate configured response
+            </summary>
+            <param name="request">The request being sent</param>
+            <param name="cancellationToken">The token used to cancel the request</param>
+            <returns>A Task containing the future response message</returns>
+        </member>
+        <member name="P:RichardSzalay.MockHttp.MockHttpMessageHandler.Fallback">
+            <summary>
+            Gets the <see cref="T:MockedRequest"/> that will handle requests that were otherwise unmatched
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockHttpMessageHandler.AddRequestExpectation(RichardSzalay.MockHttp.IMockedRequest)">
+            <summary>
+            Adds a request expectation
+            </summary>
+            <remarks>
+            Request expectations:
+            
+            <list>
+            <item>Match once</item>
+            <item>Match in order</item>
+            <item>Match before any backend definitions</item>
+            </list>
+            </remarks>
+            <param name="handler">The <see cref="T:IMockedRequest"/> that will handle the request</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockHttpMessageHandler.AddBackendDefinition(RichardSzalay.MockHttp.IMockedRequest)">
+            <summary>
+            Adds a backend definition
+            </summary>
+            <remarks>
+            Backend definitions:
+            
+            <list>
+            <item>Match multiple times</item>
+            <item>Match in any order</item>
+            <item>Match after all request expectations have been met</item>
+            </list>
+            </remarks>
+            <param name="handler">The <see cref="T:IMockedRequest"/> that will handle the request</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockHttpMessageHandler.GetMatchCount(RichardSzalay.MockHttp.IMockedRequest)">
+            <summary>
+            Returns the number of times the specified request specification has been met
+            </summary>
+            <param name="request">The mocked request</param>
+            <returns>The number of times the request has matched</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockHttpMessageHandler.Dispose(System.Boolean)">
+            <summary>
+            Disposes the current instance
+            </summary>
+            <param name="disposing">true if called from Dispose(); false if called from dtor()</param>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockHttpMessageHandler.VerifyNoOutstandingRequest">
+            <summary>
+            Throws an <see cref="T:InvalidOperationException"/> if there are requests that were received 
+            while <see cref="M:AutoFlush"/> was true, but have not been completed using <see cref="M:Flush"/>
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockHttpMessageHandler.VerifyNoOutstandingExpectation">
+            <summary>
+            Throws an <see cref="T:InvalidOperationException"/> if there are any requests configured with Expects 
+            that have yet to be received
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockHttpMessageHandler.ResetExpectations">
+            <summary>
+            Clears any pending requests configured with Expect
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockHttpMessageHandler.ResetBackendDefinitions">
+            <summary>
+            Clears any mocked requests configured with When
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockHttpMessageHandler.Clear">
+            <summary>
+            Clears all mocked requests configured with either Expect or When
+            </summary>
+        </member>
+        <member name="T:RichardSzalay.MockHttp.MockHttpMessageHandlerExtensions">
+            <summary>
+            Provides extension methods for <see cref="T:MockHttpMessageHandler"/>
+            </summary>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockHttpMessageHandlerExtensions.When(RichardSzalay.MockHttp.MockHttpMessageHandler,System.Net.Http.HttpMethod,System.String)">
+            <summary>
+            Adds a backend definition 
+            </summary>
+            <param name="handler">The source handler</param>
+            <param name="method">The HTTP method to match</param>
+            <param name="url">The URL (absolute or relative, may contain * wildcards) to match</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockHttpMessageHandlerExtensions.When(RichardSzalay.MockHttp.MockHttpMessageHandler,System.String)">
+            <summary>
+            Adds a backend definition 
+            </summary>
+            <param name="handler">The source handler</param>
+            <param name="url">The URL (absolute or relative, may contain * wildcards) to match</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockHttpMessageHandlerExtensions.Expect(RichardSzalay.MockHttp.MockHttpMessageHandler,System.Net.Http.HttpMethod,System.String)">
+            <summary>
+            Adds a request expectation
+            </summary>
+            <param name="handler">The source handler</param>
+            <param name="method">The HTTP method to match</param>
+            <param name="url">The URL (absolute or relative, may contain * wildcards) to match</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+        <member name="M:RichardSzalay.MockHttp.MockHttpMessageHandlerExtensions.Expect(RichardSzalay.MockHttp.MockHttpMessageHandler,System.String)">
+            <summary>
+            Adds a request expectation
+            </summary>
+            <param name="handler">The source handler</param>
+            <param name="url">The URL (absolute or relative, may contain * wildcards) to match</param>
+            <returns>The <see cref="T:MockedRequest"/> instance</returns>
+        </member>
+    </members>
+</doc>
