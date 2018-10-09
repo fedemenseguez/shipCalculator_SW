@@ -12,7 +12,7 @@ namespace Calculator_BLL.Repository
     {
         public string CalculateStops(string mglt, string consumables, int distance)
         {
-            if (mglt is null || mglt.Equals("unknown") || consumables is null || consumables.Equals("unknown"))
+            if (mglt == null || mglt.Equals("unknown") || consumables == null || consumables.Equals("unknown"))
             {
                 return "unknown";
             }
