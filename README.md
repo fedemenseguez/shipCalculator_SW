@@ -2,7 +2,9 @@
 This program consume an WebAPI (https://swapi.co/) that provides you a list of starships and calculate how many stops, do they need to travel a distance in mega lights
 
 ## What it does?
-You need to input an integer value that will be the mega lights you want to travel. If the value is not an integer, the program will return an error and ask you to input a new value.
+You need to input an integer value that will be the distance in mega lights you want to travel. 
+ If the value is not an integer, the program will return an error and ask you to input a new value.
+ The output should be a collection of all the star ships and the total amount of stops required to make the distance between the planets.
 
 ## How do I run it ?
 You will find the executable in folder "shipCalculator_SW\ShipCalculator\ShipCalculator\bin\Debug" and the file name is ShipCalculator.exe
